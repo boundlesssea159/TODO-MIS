@@ -15,14 +15,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
 func main() {
 	_ = godotenv.Load(".env")
 	app := fx.New(
 		fx.Provide(
-			NewLogger,
+			server.NewLogger,
+			server.NewDB,
 			persistence.NewMysqlRepository,
 			domain.NewTodo,
 			application.NewTodo,
@@ -37,15 +37,11 @@ func main() {
 	app.Run()
 }
 
-func NewLogger() (*zap.Logger, error) {
-	if os.Getenv("APP_ENV") == "prod" {
-		return zap.NewProduction()
-	}
-	return zap.NewDevelopment()
-}
-
 func startServer(lc fx.Lifecycle, engin *gin.Engine) {
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	svr := &http.Server{
 		Addr:    "localhost:" + port,
 		Handler: engin,
@@ -57,7 +53,7 @@ func startServer(lc fx.Lifecycle, engin *gin.Engine) {
 					panic(fmt.Sprintf("listen: %s\n", err.Error()))
 				}
 			}()
-			fmt.Println("http server start on localhost:8080")
+			fmt.Println("http server start on localhost:" + port)
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {

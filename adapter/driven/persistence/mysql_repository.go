@@ -4,29 +4,50 @@ import (
 	"TODO-MIS/domain"
 	"TODO-MIS/domain/entity"
 	"context"
+
+	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
-// todo: title should be set unique index
-
 type MysqlRepository struct {
+	db     *gorm.DB
+	logger *zap.Logger
 }
 
-func NewMysqlRepository() domain.TodoRepository {
-	return &MysqlRepository{}
+func NewMysqlRepository(db *gorm.DB, logger *zap.Logger) domain.TodoRepository {
+	return &MysqlRepository{db: db, logger: logger}
 }
 
 func (r *MysqlRepository) Create(ctx context.Context, title string, description string) (int, error) {
-	return 1, nil
+	item := &TodoItem{
+		Title:       title,
+		Description: description,
+	}
+	if err := r.db.WithContext(ctx).Create(item).Error; err != nil {
+		r.logger.Error("error creating item", zap.Error(err))
+		return 0, err
+	}
+	return item.ID, nil
 }
 
 func (r *MysqlRepository) Delete(ctx context.Context, id int) error {
-	return nil
+	return r.db.WithContext(ctx).Delete(&entity.TodoItem{}, id).Error
 }
 
 func (r *MysqlRepository) List(ctx context.Context) ([]*entity.TodoItem, error) {
-	return []*entity.TodoItem{}, nil
+	var items []*entity.TodoItem
+	if err := r.db.WithContext(ctx).Find(&items).Error; err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 func (r *MysqlRepository) Complete(ctx context.Context, id int) error {
-	return nil
+	err := r.db.WithContext(ctx).Model(&entity.TodoItem{}).
+		Where("id = ?", id).
+		Update("completed", true).Error
+	if err != nil {
+		r.logger.Error("error updating item", zap.Error(err))
+	}
+	return err
 }
