@@ -6,8 +6,8 @@ import (
 )
 
 type TodoRepository interface {
-	Create(ctx context.Context, title string, description string) (int, error)
+	Create(ctx context.Context, title, description string, userId int) (int, error)
 	Delete(ctx context.Context, id int) error
-	List(ctx context.Context) ([]*entity.TodoItem, error)
+	List(ctx context.Context, userId int) ([]*entity.TodoItem, error)
 	Complete(ctx context.Context, id int) error
 }

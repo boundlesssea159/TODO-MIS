@@ -4,9 +4,10 @@ import "TODO-MIS/domain/entity"
 
 type TodoItem struct {
 	ID          int    `json:"id" gorm:"primaryKey;autoIncrement"`
-	Title       string `json:"title" gorm:"size:255;not null;uniqueIndex"`
+	Title       string `json:"title" gorm:"size:255;not null"`
 	Description string `json:"description" gorm:"type:text"`
 	Status      int    `json:"status" gorm:"not null;default:0"`
+	UserID      int    `json:"user_id" gorm:"index;not null"`
 }
 
 func (TodoItem) TableName() string {
@@ -19,5 +20,6 @@ func (item TodoItem) From(todoItem entity.TodoItem) TodoItem {
 		Title:       todoItem.Title,
 		Description: todoItem.Description,
 		Status:      todoItem.Status,
+		UserID:      todoItem.UserID,
 	}
 }

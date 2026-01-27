@@ -3,6 +3,7 @@ package application
 import (
 	"TODO-MIS/adapter/driving/api/dto"
 	"TODO-MIS/domain"
+	"TODO-MIS/domain/entity"
 	"context"
 
 	"go.uber.org/zap"
@@ -20,18 +21,18 @@ func NewTodo(service *domain.Todo, logger *zap.Logger) *Todo {
 	}
 }
 
-func (todo *Todo) Create(c context.Context, req *dto.CreateTodoRequest) (int, error) {
-	return todo.service.Create(c, req.Title, req.Description)
+func (todo *Todo) Create(c context.Context, req *dto.CreateTodoRequest, userId int) (int, error) {
+	return todo.service.Create(c, req.Title, req.Description, userId)
 }
 
-func (todo *Todo) Delete(c context.Context) {
-
+func (todo *Todo) Delete(c context.Context, id int) error {
+	return todo.service.Delete(c, id)
 }
 
-func (todo *Todo) List(c context.Context) {
-
+func (todo *Todo) List(c context.Context, userId int) ([]*entity.TodoItem, error) {
+	return todo.service.List(c, userId)
 }
 
-func (todo *Todo) Complete(c context.Context) {
-
+func (todo *Todo) Complete(c context.Context, id int) error {
+	return todo.service.Complete(c, id)
 }

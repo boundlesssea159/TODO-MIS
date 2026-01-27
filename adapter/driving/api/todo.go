@@ -1,6 +1,9 @@
 package api
 
 import (
+	"TODO-MIS/common/middware"
+	"strconv"
+
 	"TODO-MIS/adapter/driving/api/dto"
 	"TODO-MIS/application"
 	_const "TODO-MIS/common/const"
@@ -37,7 +40,12 @@ func (todo *Todo) Create(c *gin.Context) {
 		util.Fail(c, http.StatusBadRequest, _const.InternalErrorCode)
 		return
 	}
-	id, err := todo.application.Create(c, req)
+	userId, ok := middware.GetUserIDFromContext(c)
+	if !ok {
+		util.Fail(c, http.StatusUnauthorized, _const.UnauthorizedCode)
+		return
+	}
+	id, err := todo.application.Create(c, req, userId)
 	if err != nil {
 		todo.logger.Error("Create todo failed", zap.Error(err))
 		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
@@ -49,26 +57,62 @@ func (todo *Todo) Create(c *gin.Context) {
 }
 
 func (todo *Todo) Delete(c *gin.Context) {
-	id := c.Param("id")
-	// 这里可以调用应用层删除逻辑，现在先返回成功占位
-	util.Success(c, gin.H{
-		"id":      id,
-		"deleted": true,
-	})
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		todo.logger.Warn("invalid id parameter", zap.String("id", idStr), zap.Error(err))
+		util.Fail(c, http.StatusBadRequest, _const.InvalidParameterCode)
+		return
+	}
+
+	err = todo.application.Delete(c, id)
+	if err != nil {
+		todo.logger.Error("Delete todo failed", zap.Int("id", id), zap.Error(err))
+		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
+		return
+	}
+	util.Success(c, nil)
 }
 
 func (todo *Todo) List(c *gin.Context) {
-	// 示例：返回一个空列表
-	util.Success(c, gin.H{
-		"items": []interface{}{},
+	userId, ok := middware.GetUserIDFromContext(c)
+	if !ok {
+		util.Fail(c, http.StatusUnauthorized, _const.UnauthorizedCode)
+		return
+	}
+	items, err := todo.application.List(c, userId)
+	if err != nil {
+		todo.logger.Error("List todos failed", zap.Error(err))
+		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
+		return
+	}
+
+	todoItems := make([]dto.TodoItem, len(items))
+	for _, item := range items {
+		dtoItem := dto.TodoItem{}
+		todoItems = append(todoItems, dtoItem.From(*item))
+	}
+
+	util.Success(c, dto.GetTodoListResponse{
+		Items: todoItems,
+		Total: len(todoItems),
 	})
 }
 
 func (todo *Todo) Complete(c *gin.Context) {
-	id := c.Param("id")
-	// 示例：标记完成
-	util.Success(c, gin.H{
-		"id":        id,
-		"completed": true,
-	})
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		todo.logger.Warn("Invalid ID parameter", zap.String("id", idStr), zap.Error(err))
+		util.Fail(c, http.StatusBadRequest, _const.InvalidParameterCode)
+		return
+	}
+
+	err = todo.application.Complete(c, id)
+	if err != nil {
+		todo.logger.Error("Complete todo failed", zap.Int("id", id), zap.Error(err))
+		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
+		return
+	}
+	util.Success(c, nil)
 }

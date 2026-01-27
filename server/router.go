@@ -9,7 +9,7 @@ import (
 func RegisterRoutes(r *gin.Engine, todo *api.Todo) {
 	apiGroup := r.Group("/api/v1")
 	apiGroup.POST("/todo-items", todo.Create)
-	apiGroup.DELETE("/todo-items/:id", todo.Delete)
 	apiGroup.GET("/todo-items", todo.List)
+	apiGroup.DELETE("/todo-items/:id", todo.Delete)
 	apiGroup.PATCH("/todo-items/:id/complete", todo.Complete)
 }

@@ -50,18 +50,18 @@ func (mr *MockTodoRepositoryMockRecorder) Complete(ctx, id interface{}) *gomock.
 }
 
 // Create mocks base method.
-func (m *MockTodoRepository) Create(ctx context.Context, title, description string) (int, error) {
+func (m *MockTodoRepository) Create(ctx context.Context, title, description string, userId int) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", ctx, title, description)
+	ret := m.ctrl.Call(m, "Create", ctx, title, description, userId)
 	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockTodoRepositoryMockRecorder) Create(ctx, title, description interface{}) *gomock.Call {
+func (mr *MockTodoRepositoryMockRecorder) Create(ctx, title, description, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockTodoRepository)(nil).Create), ctx, title, description)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockTodoRepository)(nil).Create), ctx, title, description, userId)
 }
 
 // Delete mocks base method.
@@ -79,16 +79,16 @@ func (mr *MockTodoRepositoryMockRecorder) Delete(ctx, id interface{}) *gomock.Ca
 }
 
 // List mocks base method.
-func (m *MockTodoRepository) List(ctx context.Context) ([]*entity.TodoItem, error) {
+func (m *MockTodoRepository) List(ctx context.Context, userId int) ([]*entity.TodoItem, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", ctx)
+	ret := m.ctrl.Call(m, "List", ctx, userId)
 	ret0, _ := ret[0].([]*entity.TodoItem)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List.
-func (mr *MockTodoRepositoryMockRecorder) List(ctx interface{}) *gomock.Call {
+func (mr *MockTodoRepositoryMockRecorder) List(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockTodoRepository)(nil).List), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockTodoRepository)(nil).List), ctx, userId)
 }
