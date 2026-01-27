@@ -34,7 +34,7 @@ func (todo *Todo) Create(c *gin.Context) {
 			util.Fail(c, http.StatusBadRequest, _const.InvalidParameterCode)
 			return
 		}
-		util.Fail(c, http.StatusBadRequest, _const.JsonParseErrorCode)
+		util.Fail(c, http.StatusBadRequest, _const.InternalErrorCode)
 		return
 	}
 	id, err := todo.application.Create(c, req)

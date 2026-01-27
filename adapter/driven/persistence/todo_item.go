@@ -6,7 +6,7 @@ type TodoItem struct {
 	ID          int    `json:"id" gorm:"primaryKey;autoIncrement"`
 	Title       string `json:"title" gorm:"size:255;not null;uniqueIndex"`
 	Description string `json:"description" gorm:"type:text"`
-	Completed   bool   `json:"completed" gorm:"not null;default:false"`
+	Status      int    `json:"status" gorm:"not null;default:0"`
 }
 
 func (TodoItem) TableName() string {
@@ -18,6 +18,6 @@ func (item TodoItem) From(todoItem entity.TodoItem) TodoItem {
 		ID:          todoItem.ID,
 		Title:       todoItem.Title,
 		Description: todoItem.Description,
-		Completed:   todoItem.Completed,
+		Status:      todoItem.Status,
 	}
 }
