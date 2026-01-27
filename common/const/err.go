@@ -6,13 +6,15 @@ var (
 	// 1001 ~ 1999 common error code
 	InvalidParameterCode = 1001
 	JsonParseErrorCode   = 1002
+	InternalErrorCode    = 1003
 
-	// 2000~2999 business error code
+	// 2000~ business error code
 )
 
 var (
 	InvalidParameterError = errors.New("invalid parameter")
 	JsonParseError        = errors.New("json parse error")
+	InternalError         = errors.New("internal server error")
 )
 
 func GetErrorByCode(code int) error {
@@ -22,6 +24,6 @@ func GetErrorByCode(code int) error {
 	case JsonParseErrorCode:
 		return JsonParseError
 	default:
-		return errors.New("server error")
+		return InternalError
 	}
 }

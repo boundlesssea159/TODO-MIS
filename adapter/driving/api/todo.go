@@ -28,7 +28,7 @@ func NewTodoAPI(application *application.Todo, logger *zap.Logger) *Todo {
 func (todo *Todo) Create(c *gin.Context) {
 	req := &dto.CreateTodoRequest{}
 	if err := c.ShouldBindJSON(req); err != nil {
-		todo.logger.Warn(err.Error())
+		todo.logger.Warn("Invalid create todo request", zap.Error(err))
 		var verr validator.ValidationErrors
 		if errors.As(err, &verr) {
 			util.Fail(c, http.StatusBadRequest, _const.InvalidParameterCode)
@@ -37,6 +37,15 @@ func (todo *Todo) Create(c *gin.Context) {
 		util.Fail(c, http.StatusBadRequest, _const.JsonParseErrorCode)
 		return
 	}
+	id, err := todo.application.Create(c, req)
+	if err != nil {
+		todo.logger.Error("Create todo failed", zap.Error(err))
+		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
+		return
+	}
+	util.Success(c, dto.CreateTodoResponse{
+		ID: id,
+	})
 }
 
 func (todo *Todo) Delete(c *gin.Context) {

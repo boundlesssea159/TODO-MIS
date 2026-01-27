@@ -1,10 +1,13 @@
 package domain
 
-import "TODO-MIS/domain/entity"
+import (
+	"TODO-MIS/domain/entity"
+	"context"
+)
 
 type TodoRepository interface {
-	Create(title string, description string) (int, error)
-	Delete(id int) error
-	List() ([]*entity.TodoItem, error)
-	Complete(id int) error
+	Create(ctx context.Context, title string, description string) (int, error)
+	Delete(ctx context.Context, id int) error
+	List(ctx context.Context) ([]*entity.TodoItem, error)
+	Complete(ctx context.Context, id int) error
 }
