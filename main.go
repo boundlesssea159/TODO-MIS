@@ -1,6 +1,7 @@
 package main
 
 import (
+	"TODO-MIS/adapter/driven/persistence"
 	"TODO-MIS/adapter/driving/api"
 	"TODO-MIS/application"
 	"TODO-MIS/domain"
@@ -22,6 +23,7 @@ func main() {
 	app := fx.New(
 		fx.Provide(
 			NewLogger,
+			persistence.NewMysqlRepository,
 			domain.NewTodo,
 			application.NewTodo,
 			api.NewTodoAPI,
