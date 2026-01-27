@@ -5,25 +5,36 @@ import (
 	"TODO-MIS/application"
 	_const "TODO-MIS/common/const"
 	"TODO-MIS/common/util"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"go.uber.org/zap"
 )
 
 type Todo struct {
 	application *application.Todo
+	logger      *zap.Logger
 }
 
-func NewTodoAPI(application *application.Todo) *Todo {
+func NewTodoAPI(application *application.Todo, logger *zap.Logger) *Todo {
 	return &Todo{
 		application: application,
+		logger:      logger,
 	}
 }
 
 func (todo *Todo) Create(c *gin.Context) {
 	req := &dto.CreateTodoRequest{}
 	if err := c.ShouldBindJSON(req); err != nil {
-		util.Fail(c, http.StatusBadRequest, _const.InvalidParameterCode)
+		todo.logger.Warn(err.Error())
+		var verr validator.ValidationErrors
+		if errors.As(err, &verr) {
+			util.Fail(c, http.StatusBadRequest, _const.InvalidParameterCode)
+			return
+		}
+		util.Fail(c, http.StatusBadRequest, _const.JsonParseErrorCode)
 		return
 	}
 }
