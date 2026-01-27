@@ -2,7 +2,7 @@ package server
 
 import (
 	"TODO-MIS/adapter/driving/api"
-	"TODO-MIS/middware"
+	"TODO-MIS/common/middware"
 
 	"github.com/gin-gonic/gin"
 )
