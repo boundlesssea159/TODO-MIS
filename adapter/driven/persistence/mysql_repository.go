@@ -34,7 +34,8 @@ func (r *MysqlRepository) Create(ctx context.Context, title, description string,
 }
 
 func (r *MysqlRepository) Delete(ctx context.Context, id int) error {
-	err := r.db.WithContext(ctx).Where("id=?", id).Update("status", _const.TodoItemDeletedStatus).Error
+	result := r.db.WithContext(ctx).Model(&TodoItem{}).Where("id = ?", id).Update("status", _const.TodoItemDeletedStatus)
+	err := result.Error
 	if err != nil {
 		r.logger.Error("delete item status error", zap.Error(err))
 	}
@@ -42,18 +43,30 @@ func (r *MysqlRepository) Delete(ctx context.Context, id int) error {
 }
 
 func (r *MysqlRepository) List(ctx context.Context, userId int) ([]*entity.TodoItem, error) {
-	var items []*entity.TodoItem
+	var items []*TodoItem
 	if err := r.db.WithContext(ctx).
-		Where("user_id=?").
+		Where("user_id=?", userId).
 		Order("created_at desc").
 		Find(&items).Error; err != nil {
 		return nil, err
 	}
-	return items, nil
+
+	// 转换为实体类型
+	result := make([]*entity.TodoItem, len(items))
+	for i, item := range items {
+		result[i] = &entity.TodoItem{
+			ID:          item.ID,
+			Title:       item.Title,
+			Description: item.Description,
+			Status:      item.Status,
+			UserID:      item.UserID,
+		}
+	}
+	return result, nil
 }
 
 func (r *MysqlRepository) Complete(ctx context.Context, id int) error {
-	err := r.db.WithContext(ctx).Model(&entity.TodoItem{}).
+	err := r.db.WithContext(ctx).Model(&TodoItem{}).
 		Where("id = ?", id).
 		Update("status", _const.TodoItemDoneStatus).Error
 	if err != nil {

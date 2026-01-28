@@ -1,9 +1,11 @@
 package main
 
 import (
+	"TODO-MIS/adapter/driven/auth"
 	"TODO-MIS/adapter/driven/persistence"
 	"TODO-MIS/adapter/driving/api"
 	"TODO-MIS/application"
+	auth2 "TODO-MIS/domain/auth"
 	"TODO-MIS/domain/todo"
 	"TODO-MIS/server"
 	"context"
@@ -21,13 +23,20 @@ func main() {
 	_ = godotenv.Load(".env")
 	app := fx.New(
 		fx.Provide(
+			// common provider
 			server.NewLogger,
 			server.NewDB,
+			server.NewGinEngine,
+			// business provider
 			persistence.NewMysqlRepository,
 			todo.NewTodo,
 			application.NewTodo,
 			api.NewTodoAPI,
-			server.NewGinEngine,
+			// auth provider
+			auth.NewOAuthFactory,
+			auth2.NewAuthService,
+			application.NewAuth,
+			api.NewAuth,
 		),
 		fx.Invoke(
 			server.RegisterRoutes,

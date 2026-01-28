@@ -2,6 +2,7 @@ package server
 
 import (
 	"TODO-MIS/common/middware"
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -28,9 +29,10 @@ func NewDB() *gorm.DB {
 	if dsn == "" {
 		panic("MYSQL_DSN is empty")
 	}
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("connect fail: %v, DSN: %s", err, dsn))
 	}
 	return db
 }

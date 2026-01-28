@@ -5,18 +5,18 @@ import (
 )
 
 type AuthService struct {
-	oauthProvider OAuthProvider
+	oauthProviderFactory OAuthProvider
 }
 
-func NewAuthService(oauthProvider OAuthProvider) *AuthService {
+func NewAuthService(oauthProviderFactory OAuthProvider) *AuthService {
 	return &AuthService{
-		oauthProvider: oauthProvider,
+		oauthProviderFactory: oauthProviderFactory,
 	}
 }
 
 func (service *AuthService) GetAuthURL(c context.Context, callbackUrl, channel string) (string, error) {
-	return service.oauthProvider.GetOAuthURL(c, callbackUrl, channel)
+	return service.oauthProviderFactory.GetOAuthURL(c, callbackUrl, channel)
 }
 func (service *AuthService) GetTokenWithCode(c context.Context, code, channel string) (string, error) {
-	return service.oauthProvider.ExchangeTokenWithCode(c, code, channel)
+	return service.oauthProviderFactory.ExchangeTokenWithCode(c, code, channel)
 }

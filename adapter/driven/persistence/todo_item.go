@@ -10,6 +10,8 @@ type TodoItem struct {
 	Description string `json:"description" gorm:"type:text"`
 	Status      int    `json:"status" gorm:"not null;default:0"`
 	UserID      int    `json:"user_id" gorm:"index;not null"`
+	CreatedAt   int64  `json:"created_at" gorm:"autoCreateTime:milli"`
+	UpdatedAt   int64  `json:"updated_at" gorm:"autoUpdateTime:milli"`
 }
 
 func (TodoItem) TableName() string {

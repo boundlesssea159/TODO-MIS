@@ -8,7 +8,7 @@ import (
 type OAuthProviderFactory struct {
 }
 
-func NewOAuthProvider() *OAuthProviderFactory {
+func NewOAuthFactory() auth.OAuthProvider {
 	return &OAuthProviderFactory{}
 }
 
