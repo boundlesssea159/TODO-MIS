@@ -1,6 +1,8 @@
 package persistence
 
-import "TODO-MIS/domain/entity"
+import (
+	"TODO-MIS/domain/todo/entity"
+)
 
 type TodoItem struct {
 	ID          int    `json:"id" gorm:"primaryKey;autoIncrement"`

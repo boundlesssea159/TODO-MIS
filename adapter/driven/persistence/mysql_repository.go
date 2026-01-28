@@ -2,8 +2,8 @@ package persistence
 
 import (
 	_const "TODO-MIS/common/const"
-	"TODO-MIS/domain"
-	"TODO-MIS/domain/entity"
+	"TODO-MIS/domain/todo"
+	"TODO-MIS/domain/todo/entity"
 	"context"
 
 	"go.uber.org/zap"
@@ -15,7 +15,7 @@ type MysqlRepository struct {
 	logger *zap.Logger
 }
 
-func NewMysqlRepository(db *gorm.DB, logger *zap.Logger) domain.TodoRepository {
+func NewMysqlRepository(db *gorm.DB, logger *zap.Logger) todo.TodoRepository {
 	return &MysqlRepository{db: db, logger: logger}
 }
 

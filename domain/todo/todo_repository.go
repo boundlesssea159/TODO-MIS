@@ -1,7 +1,7 @@
-package domain
+package todo
 
 import (
-	"TODO-MIS/domain/entity"
+	"TODO-MIS/domain/todo/entity"
 	"context"
 )
 

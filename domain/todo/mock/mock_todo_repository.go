@@ -5,7 +5,7 @@
 package mock
 
 import (
-	entity "TODO-MIS/domain/entity"
+	"TODO-MIS/domain/todo/entity"
 	context "context"
 	reflect "reflect"
 

@@ -2,19 +2,19 @@ package application
 
 import (
 	"TODO-MIS/adapter/driving/api/dto"
-	"TODO-MIS/domain"
-	"TODO-MIS/domain/entity"
+	"TODO-MIS/domain/todo"
+	"TODO-MIS/domain/todo/entity"
 	"context"
 
 	"go.uber.org/zap"
 )
 
 type Todo struct {
-	service *domain.Todo
+	service *todo.Todo
 	logger  *zap.Logger
 }
 
-func NewTodo(service *domain.Todo, logger *zap.Logger) *Todo {
+func NewTodo(service *todo.Todo, logger *zap.Logger) *Todo {
 	return &Todo{
 		service: service,
 		logger:  logger,

@@ -4,7 +4,7 @@ import (
 	"TODO-MIS/adapter/driven/persistence"
 	"TODO-MIS/adapter/driving/api"
 	"TODO-MIS/application"
-	"TODO-MIS/domain"
+	"TODO-MIS/domain/todo"
 	"TODO-MIS/server"
 	"context"
 	"errors"
@@ -24,7 +24,7 @@ func main() {
 			server.NewLogger,
 			server.NewDB,
 			persistence.NewMysqlRepository,
-			domain.NewTodo,
+			todo.NewTodo,
 			application.NewTodo,
 			api.NewTodoAPI,
 			server.NewGinEngine,

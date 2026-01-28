@@ -1,6 +1,8 @@
 package dto
 
-import "TODO-MIS/domain/entity"
+import (
+	"TODO-MIS/domain/todo/entity"
+)
 
 type CreateTodoRequest struct {
 	Title       string `json:"title" binding:"required"`

@@ -2,9 +2,9 @@ package application
 
 import (
 	"TODO-MIS/adapter/driving/api/dto"
-	"TODO-MIS/domain"
-	"TODO-MIS/domain/entity"
-	"TODO-MIS/domain/mock"
+	"TODO-MIS/domain/todo"
+	"TODO-MIS/domain/todo/entity"
+	"TODO-MIS/domain/todo/mock"
 	"context"
 	"errors"
 	"testing"
@@ -20,7 +20,7 @@ type TodoTestSuite struct {
 	repo    *mock.MockTodoRepository
 	app     *Todo
 	ctx     context.Context
-	service *domain.Todo
+	service *todo.Todo
 	logger  *zap.Logger
 }
 
@@ -29,7 +29,7 @@ func (s *TodoTestSuite) SetupTest() {
 	s.ctrl = gomock.NewController(s.T())
 	s.repo = mock.NewMockTodoRepository(s.ctrl)
 	s.logger = zap.NewNop()
-	s.service = domain.NewTodo(s.repo, s.logger)
+	s.service = todo.NewTodo(s.repo, s.logger)
 	s.app = &Todo{
 		service: s.service,
 		logger:  s.logger,
