@@ -43,7 +43,10 @@ func (r *MysqlRepository) Delete(ctx context.Context, id int) error {
 
 func (r *MysqlRepository) List(ctx context.Context, userId int) ([]*entity.TodoItem, error) {
 	var items []*entity.TodoItem
-	if err := r.db.WithContext(ctx).Where("user_id=?", userId).Find(&items).Error; err != nil {
+	if err := r.db.WithContext(ctx).
+		Where("user_id=?").
+		Order("created_at desc").
+		Find(&items).Error; err != nil {
 		return nil, err
 	}
 	return items, nil
