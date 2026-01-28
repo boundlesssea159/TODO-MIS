@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: todo-mis-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo-mis
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+    command: [
+      '--default-authentication-plugin=mysql_native_password',
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci'
+    ]
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todo-mis-app
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    environment:
+      APP_ENV: prod
+      PORT: 8080
+      MYSQL_DSN: todo_user:todo_password@tcp(mysql:3306)/todo-mis?charset=utf8mb4&parseTime=True&loc=Local
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
