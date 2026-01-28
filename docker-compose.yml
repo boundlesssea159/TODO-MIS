@@ -6,10 +6,10 @@ services:
     container_name: todo-mis-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: todo-mis
-      MYSQL_USER: todo_user
-      MYSQL_PASSWORD: todo_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -36,7 +36,7 @@ services:
     environment:
       APP_ENV: prod
       PORT: 8080
-      MYSQL_DSN: todo_user:todo_password@tcp(mysql:3306)/todo-mis?charset=utf8mb4&parseTime=True&loc=Local
+      MYSQL_DSN: ${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(mysql:3306)/${MYSQL_DATABASE}?charset=utf8mb4&parseTime=True&loc=Local
     networks:
       - app-network
     healthcheck:
