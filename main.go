@@ -52,7 +52,7 @@ func startServer(lc fx.Lifecycle, engin *gin.Engine) {
 		port = "8080"
 	}
 	svr := &http.Server{
-		Addr:    "localhost:" + port,
+		Addr:    ":" + port,
 		Handler: engin,
 	}
 	lc.Append(fx.Hook{
@@ -62,7 +62,7 @@ func startServer(lc fx.Lifecycle, engin *gin.Engine) {
 					panic(fmt.Sprintf("listen: %s\n", err.Error()))
 				}
 			}()
-			fmt.Println("http server start on localhost:" + port)
+			fmt.Println("http server start on :" + port)
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {

@@ -2,6 +2,7 @@ package server
 
 import (
 	"TODO-MIS/adapter/driving/api"
+	"TODO-MIS/common/middware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,8 @@ func RegisterRoutes(r *gin.Engine, todo *api.Todo, auth *api.Auth) {
 	r.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
+	r.Use(gin.Logger(), gin.Recovery(), middware.AuthMiddleware())
+	// business routes
 	apiGroup := r.Group("/api/v1")
 	apiGroup.POST("/todo-items", todo.Create)
 	apiGroup.GET("/todo-items", todo.List)
