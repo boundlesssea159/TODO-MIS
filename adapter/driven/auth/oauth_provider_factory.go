@@ -27,10 +27,16 @@ func (factory *OAuthProviderFactory) getProvider(channel string) auth.OAuthProvi
 
 func (factory *OAuthProviderFactory) GetOAuthURL(ctx context.Context, callbackUrl, channel string) (string, error) {
 	provider := factory.getProvider(channel)
+	if provider == nil {
+		return "", nil
+	}
 	return provider.GetOAuthURL(ctx, callbackUrl, channel)
 }
 
 func (factory *OAuthProviderFactory) ExchangeTokenWithCode(ctx context.Context, code, channel string) (string, error) {
 	provider := factory.getProvider(channel)
+	if provider == nil {
+		return "", nil
+	}
 	return provider.ExchangeTokenWithCode(ctx, code, channel)
 }
