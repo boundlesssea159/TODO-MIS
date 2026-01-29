@@ -13,21 +13,21 @@ var (
 )
 
 var (
-	InvalidParameterError = errors.New("invalid parameter")
-	JsonParseError        = errors.New("json parse error")
-	InternalError         = errors.New("internal server error")
-	UnauthorizedError     = errors.New("unauthorized")
+	ErrInvalidParameter = errors.New("invalid parameter")
+	ErrJsonParse        = errors.New("json parse error")
+	ErrInternal         = errors.New("internal server error")
+	ErrUnauthorized     = errors.New("unauthorized")
 )
 
 func GetErrorByCode(code int) error {
 	switch code {
 	case InvalidParameterCode:
-		return InvalidParameterError
+		return ErrInvalidParameter
 	case JsonParseErrorCode:
-		return JsonParseError
+		return ErrJsonParse
 	case UnauthorizedCode:
-		return UnauthorizedError
+		return ErrUnauthorized
 	default:
-		return InternalError
+		return ErrInternal
 	}
 }

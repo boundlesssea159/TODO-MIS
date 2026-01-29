@@ -67,11 +67,12 @@ This project follows **Hexagonal Architecture** (also known as Ports and Adapter
 ### For Docker Compose (Recommended)
 - Docker 20.10+
 - Docker Compose 2.0+
+- [Task](https://taskfile.dev) (optional, for running CI tasks)
 
 ### For Local Development
 - Go 1.25.5+
 - MySQL 8.0+
-- Make (optional)
+- [Task](https://taskfile.dev) (optional, for running development tasks)
 
 ## Getting Started
 
@@ -592,6 +593,131 @@ logger.Info("message",
     zap.String("key", "value"),
     zap.Int("id", 123),
 )
+```
+
+## Using Taskfile for CI/CD
+
+This project uses [Task](https://taskfile.dev) for automating common development and CI tasks.
+
+### Install Task
+
+**macOS:**
+```bash
+brew install go-task/tap/go-task
+```
+
+**Windows (Scoop):**
+```bash
+scoop install task
+```
+
+**Linux:**
+```bash
+sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+```
+
+**Or install via Go:**
+```bash
+go install github.com/go-task/task/v3/cmd/task@latest
+```
+
+### Available Tasks
+
+View all available tasks:
+```bash
+task --list
+```
+
+### Common Tasks
+
+**Run complete CI pipeline:**
+```bash
+task all
+```
+This runs: clean → fmt → lint → test → build → docker-build → docker-up → health-check → docker-down
+
+**Quick CI (without Docker):**
+```bash
+task ci-quick
+```
+Runs: fmt → lint → test → build
+
+**Format code:**
+```bash
+task fmt
+```
+
+**Run linters:**
+```bash
+task lint
+```
+
+**Run tests:**
+```bash
+task test           # With coverage
+task test-short     # Short mode
+```
+
+**Build application:**
+```bash
+task build          # Build binary
+```
+
+**Docker operations:**
+```bash
+task docker-build   # Build images
+task docker-up      # Start containers
+task docker-down    # Stop containers
+task docker-down-v  # Stop and remove volumes
+task docker-logs    # View logs
+task docker-ps      # Show status
+task docker-restart # Restart all
+```
+
+**Database operations:**
+```bash
+task db-migrate     # Run migrations
+task db-console     # Open MySQL console
+```
+
+**Development:**
+```bash
+task run            # Run locally
+task dev            # Run with hot reload (requires air)
+task health-check   # Check application health
+```
+
+**Utilities:**
+```bash
+task clean          # Clean build artifacts
+task clean-all      # Clean everything
+task deps           # Install dependencies
+task mock           # Generate mocks
+task security       # Security scan
+task tools          # Install dev tools
+```
+
+### CI/CD Integration
+
+For GitHub Actions, GitLab CI, or other CI systems:
+
+```yaml
+# Example GitHub Actions
+- name: Install Task
+  run: sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+
+- name: Run CI
+  run: task all
+```
+
+For Jenkins:
+
+```groovy
+stage('CI') {
+    steps {
+        sh 'task all'
+    }
+}
 ```
 
 ## Troubleshooting

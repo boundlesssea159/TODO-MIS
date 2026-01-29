@@ -165,7 +165,7 @@ func (s *MysqlRepositoryTestSuite) TestComplete_Fail() {
 
 func (s *MysqlRepositoryTestSuite) TearDownTest() {
 	if s.logger != nil {
-		s.logger.Sync()
+		_ = s.logger.Sync() // Ignore sync errors in tests
 	}
 }
 

@@ -1,0 +1,93 @@
+version: '3'
+
+vars:
+  PROJECT_NAME: TODO-MIS
+  DOCKER_COMPOSE: docker compose
+
+tasks:
+  # Default task - show available commands
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  # CI - Complete integration test pipeline
+  all:
+    desc: Run complete CI pipeline (lint, test, build, integration test)
+    cmds:
+      - task: clean
+      - task: fmt
+      - task: test
+      - task: build
+      - task: docker-build
+      - task: docker-up
+      - task: docker-down-v
+      - echo "✅ CI pipeline completed successfully!"
+
+  # Code formatting
+  fmt:
+    desc: Format Go code
+    cmds:
+      - go fmt ./...
+      - echo "✅ Code formatted"
+
+  # Run tests
+  test:
+    desc: Run all tests with coverage
+    cmds:
+      - go test ./... -v -cover -coverprofile=coverage.out
+      - go tool cover -func=coverage.out
+      - echo "✅ Tests passed"
+
+  # Run tests (short mode)
+  test-short:
+    desc: Run tests in short mode
+    cmds:
+      - go test ./... -short
+
+  # Build binary
+  build:
+    desc: Build the application binary
+    cmds:
+      - go build -o bin/{{.PROJECT_NAME}} .
+
+
+  # Clean build artifacts
+  clean:
+    desc: Clean build artifacts and test cache
+    cmds:
+      - rm -rf bin/
+      - rm -f coverage.out
+      - go clean -testcache
+      - echo "✅ Cleaned build artifacts"
+
+  # Install dependencies
+  deps:
+    desc: Download and tidy dependencies
+    cmds:
+      - go mod download
+      - go mod tidy
+      - echo "✅ Dependencies installed"
+
+  # Docker operations
+  docker-build:
+    desc: Build Docker images
+    cmds:
+      - "{{.DOCKER_COMPOSE}} build"
+      - echo "✅ Docker images built"
+
+  docker-up:
+    desc: Start Docker containers
+    cmds:
+      - "{{.DOCKER_COMPOSE}} up -d"
+      - echo "⏳ Waiting for services to be ready..."
+      - sleep 10
+      - echo "✅ Docker containers started"
+
+  docker-down-v:
+    desc: Stop and remove Docker containers with volumes
+    cmds:
+      - "{{.DOCKER_COMPOSE}} down -v"
+      - echo "✅ Docker containers and volumes removed"
+
+

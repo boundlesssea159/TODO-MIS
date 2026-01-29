@@ -45,14 +45,14 @@ func (a *Auth) GetTokenWithCode(c *gin.Context) {
 		return
 	}
 
-	token, err := a.application.GetTokenWithCode(c.Request.Context(), req.Code, req.Channel)
+	_, err := a.application.GetTokenWithCode(c.Request.Context(), req.Code, req.Channel)
 	if err != nil {
 		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
 		return
 	}
 
 	// mock token generation
-	token, _ = middware.GenerateToken(1)
+	token, _ := middware.GenerateToken(1)
 	util.Success(c, dto.GetTokenWithCodeResponse{
 		AccessToken: token,
 	})
