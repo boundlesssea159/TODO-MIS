@@ -4,9 +4,10 @@ import (
 	_const "TODO-MIS/common/const"
 	"TODO-MIS/common/util"
 	"errors"
-	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"strings"
+
+	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,12 +47,12 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 type Claims struct {
-	UserID uint `json:"user_id"`
+	UserID int `json:"user_id"`
 	jwt.RegisteredClaims
 }
 
 // GenerateToken generate JWT token
-func GenerateToken(userID uint) (string, error) {
+func GenerateToken(userID int) (string, error) {
 	claims := Claims{
 		UserID: userID,
 	}

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `todo_items` (
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    KEY `idx_user_created_at` (`user_id`, `created_at`)
+    KEY `idx_user_status_created_at` (`user_id`,`status`, `created_at`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='todo items table';
 
 

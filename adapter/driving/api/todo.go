@@ -87,7 +87,7 @@ func (todo *Todo) List(c *gin.Context) {
 		return
 	}
 
-	todoItems := make([]dto.TodoItem, len(items))
+	todoItems := make([]dto.TodoItem, 0, len(items))
 	for _, item := range items {
 		dtoItem := dto.TodoItem{}
 		todoItems = append(todoItems, dtoItem.From(*item))

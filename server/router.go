@@ -12,18 +12,18 @@ func RegisterRoutes(r *gin.Engine, todo *api.Todo, auth *api.Auth) {
 	r.GET("/health", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
-	r.Use(gin.Logger(), gin.Recovery(), middware.AuthMiddleware())
-	// business routes
-	apiGroup := r.Group("/api/v1")
-	apiGroup.POST("/todo-items", todo.Create)
-	apiGroup.GET("/todo-items", todo.List)
-	apiGroup.DELETE("/todo-items/:id", todo.Delete)
-	apiGroup.PATCH("/todo-items/:id/complete", todo.Complete)
-	apiGroup.GET("/")
-	apiGroup.GET("")
 
-	// OAuth routes
+	apiGroup := r.Group("/api/v1")
+	// OAuth
 	authGroup := apiGroup.Group("/auth")
 	authGroup.GET("/url", auth.GetAuthURL)
 	authGroup.GET("/token", auth.GetTokenWithCode)
+
+	apiGroup.Use(gin.Logger(), gin.Recovery(), middware.AuthMiddleware())
+	// business routes
+	todoItemsGroup := apiGroup.Group("/todo-items")
+	todoItemsGroup.POST("", todo.Create)
+	todoItemsGroup.GET("", todo.List)
+	todoItemsGroup.DELETE("/:id", todo.Delete)
+	todoItemsGroup.PATCH("/:id/complete", todo.Complete)
 }

@@ -43,5 +43,7 @@ func (TodoItem) From(todoItem entity.TodoItem) TodoItem {
 		Title:       todoItem.Title,
 		Description: todoItem.Description,
 		Status:      todoItem.ConvertStatus(),
+		CreatedAt:   todoItem.CreatedAt.String(),
+		UpdatedAt:   todoItem.UpdatedAt.String(),
 	}
 }

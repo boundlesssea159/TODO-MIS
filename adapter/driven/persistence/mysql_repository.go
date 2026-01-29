@@ -45,22 +45,16 @@ func (r *MysqlRepository) Delete(ctx context.Context, id int) error {
 func (r *MysqlRepository) List(ctx context.Context, userId int) ([]*entity.TodoItem, error) {
 	var items []*TodoItem
 	if err := r.db.WithContext(ctx).
-		Where("user_id=?", userId).
+		Where("user_id=? and status!=?", userId, _const.TodoItemDeletedStatus).
 		Order("created_at desc").
 		Find(&items).Error; err != nil {
 		return nil, err
 	}
 
-	// 转换为实体类型
-	result := make([]*entity.TodoItem, len(items))
-	for i, item := range items {
-		result[i] = &entity.TodoItem{
-			ID:          item.ID,
-			Title:       item.Title,
-			Description: item.Description,
-			Status:      item.Status,
-			UserID:      item.UserID,
-		}
+	result := make([]*entity.TodoItem, 0, len(items))
+	for _, item := range items {
+		domainEntity := item.ToDomainEntity()
+		result = append(result, &domainEntity)
 	}
 	return result, nil
 }
