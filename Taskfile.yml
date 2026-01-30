@@ -69,6 +69,21 @@ tasks:
       - go mod tidy
       - echo "✅ Dependencies installed"
 
+  # Generate mocks
+  mock:
+    desc: Generate mock files for all interfaces
+    cmds:
+      - |
+        if command -v mockgen &> /dev/null; then
+          echo "🔄 Generating mocks..."
+          go generate ./...
+          echo "✅ All mocks generated successfully"
+        else
+          echo "❌ mockgen not installed"
+          echo "   Install: go install go.uber.org/mock/mockgen@latest"
+          exit 1
+        fi
+
   # Docker operations
   docker-build:
     desc: Build Docker images
