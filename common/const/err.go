@@ -8,6 +8,7 @@ var (
 	JsonParseErrorCode   = 1002
 	InternalErrorCode    = 1003
 	UnauthorizedCode     = 1004
+	DataNotFoundCode     = 1005
 
 	// 2000~ business error code
 )
@@ -17,6 +18,7 @@ var (
 	ErrJsonParse        = errors.New("json parse error")
 	ErrInternal         = errors.New("internal server error")
 	ErrUnauthorized     = errors.New("unauthorized")
+	ErrDataNotFound     = errors.New("data not found")
 )
 
 func GetErrorByCode(code int) error {

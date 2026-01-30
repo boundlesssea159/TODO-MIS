@@ -4,7 +4,6 @@ import (
 	"TODO-MIS/adapter/driving/api/dto"
 	"TODO-MIS/application"
 	_const "TODO-MIS/common/const"
-	"TODO-MIS/common/middware"
 	"TODO-MIS/common/util"
 	"net/http"
 
@@ -50,9 +49,11 @@ func (a *Auth) GetTokenWithCode(c *gin.Context) {
 		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
 		return
 	}
-
-	// mock token generation
-	token, _ := middware.GenerateToken(1)
+	token, err := a.application.GenerateJWT(c.Request.Context(), req.Email, req.Code)
+	if err != nil {
+		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
+		return
+	}
 	util.Success(c, dto.GetTokenWithCodeResponse{
 		AccessToken: token,
 	})

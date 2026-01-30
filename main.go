@@ -37,6 +37,7 @@ func main() {
 			auth2.NewAuthService,
 			application.NewAuth,
 			api.NewAuth,
+			persistence.NewAuthRepository,
 		),
 		fx.Invoke(
 			server.RegisterRoutes,

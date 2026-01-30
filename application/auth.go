@@ -22,3 +22,7 @@ func (a *Auth) GetAuthURL(c context.Context, callbackUrl, channel string) (strin
 func (a *Auth) GetTokenWithCode(c context.Context, code, channel string) (string, error) {
 	return a.authService.GetTokenWithCode(c, code, channel)
 }
+
+func (a *Auth) GenerateJWT(ctx context.Context, email, code string) (string, error) {
+	return a.authService.GenerateJWT(ctx, email, code)
+}

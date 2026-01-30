@@ -61,7 +61,7 @@ func (r *MysqlRepository) List(ctx context.Context, userId int) ([]*entity.TodoI
 
 func (r *MysqlRepository) Complete(ctx context.Context, id int) error {
 	err := r.db.WithContext(ctx).Model(&TodoItem{}).
-		Where("id = ?", id).
+		Where("id = ? and user_id=?", id).
 		Update("status", _const.TodoItemDoneStatus).Error
 	if err != nil {
 		r.logger.Error("complete item status error", zap.Error(err))

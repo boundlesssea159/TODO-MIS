@@ -12,6 +12,7 @@ type GetAuthURLResponse struct {
 type GetTokenWithCodeRequest struct {
 	Channel string `form:"channel" binding:"required"`
 	Code    string `form:"code" binding:"required"`
+	Email   string `form:"email" binding:"required"`
 }
 
 type GetTokenWithCodeResponse struct {
