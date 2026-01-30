@@ -57,6 +57,11 @@ func (todo *Todo) Create(c *gin.Context) {
 }
 
 func (todo *Todo) Delete(c *gin.Context) {
+	userId, ok := middware.GetUserIDFromContext(c)
+	if !ok {
+		util.Fail(c, http.StatusUnauthorized, _const.UnauthorizedCode)
+		return
+	}
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -65,7 +70,7 @@ func (todo *Todo) Delete(c *gin.Context) {
 		return
 	}
 
-	err = todo.application.Delete(c, id)
+	err = todo.application.Delete(c, id, userId)
 	if err != nil {
 		todo.logger.Error("Delete todo failed", zap.Int("id", id), zap.Error(err))
 		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)
@@ -100,6 +105,11 @@ func (todo *Todo) List(c *gin.Context) {
 }
 
 func (todo *Todo) Complete(c *gin.Context) {
+	userId, ok := middware.GetUserIDFromContext(c)
+	if !ok {
+		util.Fail(c, http.StatusUnauthorized, _const.UnauthorizedCode)
+		return
+	}
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -108,7 +118,7 @@ func (todo *Todo) Complete(c *gin.Context) {
 		return
 	}
 
-	err = todo.application.Complete(c, id)
+	err = todo.application.Complete(c, id, userId)
 	if err != nil {
 		todo.logger.Error("Complete todo failed", zap.Int("id", id), zap.Error(err))
 		util.Fail(c, http.StatusInternalServerError, _const.InternalErrorCode)

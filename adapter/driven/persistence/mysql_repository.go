@@ -33,8 +33,8 @@ func (r *MysqlRepository) Create(ctx context.Context, title, description string,
 	return item.ID, nil
 }
 
-func (r *MysqlRepository) Delete(ctx context.Context, id int) error {
-	result := r.db.WithContext(ctx).Model(&TodoItem{}).Where("id = ?", id).Update("status", _const.TodoItemDeletedStatus)
+func (r *MysqlRepository) Delete(ctx context.Context, id int, userId int) error {
+	result := r.db.WithContext(ctx).Model(&TodoItem{}).Where("id = ? and user_id=?", id, userId).Update("status", _const.TodoItemDeletedStatus)
 	err := result.Error
 	if err != nil {
 		r.logger.Error("delete item status error", zap.Error(err))
@@ -59,9 +59,9 @@ func (r *MysqlRepository) List(ctx context.Context, userId int) ([]*entity.TodoI
 	return result, nil
 }
 
-func (r *MysqlRepository) Complete(ctx context.Context, id int) error {
+func (r *MysqlRepository) Complete(ctx context.Context, id int, userId int) error {
 	err := r.db.WithContext(ctx).Model(&TodoItem{}).
-		Where("id = ? and user_id=?", id).
+		Where("id = ? and user_id=?", id, userId).
 		Update("status", _const.TodoItemDoneStatus).Error
 	if err != nil {
 		r.logger.Error("complete item status error", zap.Error(err))

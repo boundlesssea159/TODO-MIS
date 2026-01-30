@@ -73,7 +73,7 @@ func (s *MysqlRepositoryTestSuite) TestDelete_Success() {
 	}
 	s.db.Create(item)
 
-	err := s.repo.Delete(s.ctx, item.ID)
+	err := s.repo.Delete(s.ctx, item.ID, 100023323)
 	s.NoError(err)
 
 	var updatedItem TodoItem
@@ -91,10 +91,10 @@ func (s *MysqlRepositoryTestSuite) TestDelete_Fail() {
 	}
 	s.db.Create(item)
 
-	err := s.repo.Delete(s.ctx, item.ID)
+	err := s.repo.Delete(s.ctx, item.ID, 0)
 	s.NoError(err)
 
-	err = s.repo.Delete(s.ctx, 999999)
+	err = s.repo.Delete(s.ctx, 999999, 0)
 	s.NoError(err)
 }
 
@@ -150,7 +150,7 @@ func (s *MysqlRepositoryTestSuite) TestComplete_Success() {
 		UserID:      100023323,
 	}
 	s.db.Create(item)
-	err := s.repo.Complete(s.ctx, item.ID)
+	err := s.repo.Complete(s.ctx, item.ID, 100023323)
 	s.NoError(err)
 	var updatedItem TodoItem
 	result := s.db.First(&updatedItem, item.ID)
@@ -159,7 +159,7 @@ func (s *MysqlRepositoryTestSuite) TestComplete_Success() {
 }
 
 func (s *MysqlRepositoryTestSuite) TestComplete_Fail() {
-	err := s.repo.Complete(s.ctx, 999999)
+	err := s.repo.Complete(s.ctx, 999999, 0)
 	s.NoError(err)
 }
 

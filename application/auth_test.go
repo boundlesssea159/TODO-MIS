@@ -13,18 +13,20 @@ import (
 
 type AuthTestSuite struct {
 	suite.Suite
-	ctrl         *gomock.Controller
-	mockProvider *mock.MockOAuthProvider
-	authApp      *Auth
-	ctx          context.Context
-	authService  *auth.AuthService
+	ctrl           *gomock.Controller
+	mockProvider   *mock.MockOAuthProvider
+	authRepository *mock.MockAuthRepository
+	authApp        *Auth
+	ctx            context.Context
+	authService    *auth.AuthService
 }
 
 func (s *AuthTestSuite) SetupTest() {
 	s.ctx = context.Background()
 	s.ctrl = gomock.NewController(s.T())
 	s.mockProvider = mock.NewMockOAuthProvider(s.ctrl)
-	s.authService = auth.NewAuthService(s.mockProvider)
+	s.authRepository = mock.NewMockAuthRepository(s.ctrl)
+	s.authService = auth.NewAuthService(s.mockProvider, s.authRepository)
 	s.authApp = &Auth{
 		authService: s.authService,
 	}

@@ -23,14 +23,14 @@ func (todo *Todo) Create(ctx context.Context, title, description string, userId 
 	return todo.repository.Create(ctx, title, description, userId)
 }
 
-func (todo *Todo) Delete(ctx context.Context, id int) error {
-	return todo.repository.Delete(ctx, id)
+func (todo *Todo) Delete(ctx context.Context, id int, userId int) error {
+	return todo.repository.Delete(ctx, id, userId)
 }
 
 func (todo *Todo) List(ctx context.Context, userId int) ([]*entity.TodoItem, error) {
 	return todo.repository.List(ctx, userId)
 }
 
-func (todo *Todo) Complete(ctx context.Context, id int) error {
-	return todo.repository.Complete(ctx, id)
+func (todo *Todo) Complete(ctx context.Context, id int, userId int) error {
+	return todo.repository.Complete(ctx, id, userId)
 }

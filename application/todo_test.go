@@ -64,15 +64,15 @@ func (s *TodoTestSuite) TestCreate_Fail() {
 
 func (s *TodoTestSuite) TestDelete_Success() {
 	id := 1
-	s.repo.EXPECT().Delete(gomock.Any(), id).Return(nil)
-	err := s.app.Delete(s.ctx, id)
+	s.repo.EXPECT().Delete(gomock.Any(), id, 11212121).Return(nil)
+	err := s.app.Delete(s.ctx, id, 11212121)
 	s.Nil(err)
 }
 
 func (s *TodoTestSuite) TestDelete_Fail() {
 	id := 1
-	s.repo.EXPECT().Delete(gomock.Any(), id).Return(errors.New("not found"))
-	err := s.app.Delete(s.ctx, id)
+	s.repo.EXPECT().Delete(gomock.Any(), id, 11212121).Return(errors.New("not found"))
+	err := s.app.Delete(s.ctx, id, 11212121)
 	s.NotNil(err)
 	s.Equal("not found", err.Error())
 }
@@ -112,15 +112,15 @@ func (s *TodoTestSuite) TestList_Fail() {
 
 func (s *TodoTestSuite) TestComplete_Success() {
 	id := 1
-	s.repo.EXPECT().Complete(gomock.Any(), id).Return(nil)
-	err := s.app.Complete(s.ctx, id)
+	s.repo.EXPECT().Complete(gomock.Any(), id, 11212121).Return(nil)
+	err := s.app.Complete(s.ctx, id, 11212121)
 	s.Nil(err)
 }
 
 func (s *TodoTestSuite) TestComplete_Fail() {
 	id := 1
-	s.repo.EXPECT().Complete(gomock.Any(), id).Return(errors.New("not found"))
-	err := s.app.Complete(s.ctx, id)
+	s.repo.EXPECT().Complete(gomock.Any(), id, 11212121).Return(errors.New("not found"))
+	err := s.app.Complete(s.ctx, id, 11212121)
 	s.NotNil(err)
 	s.Equal("not found", err.Error())
 }
