@@ -5,6 +5,7 @@ import (
 	"TODO-MIS/common/util"
 	"errors"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -17,7 +18,7 @@ const (
 	TokenType = "Bearer"
 )
 
-var SecretKey = []byte("your-secret-key-change-in-production")
+var SecretKey = os.Getenv("SECRET_KEY")
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
